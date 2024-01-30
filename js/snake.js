@@ -66,7 +66,7 @@ class Snake {
 
             segment.className = 'snake-segment'
             segment.style.position = 'absolute'
-            segment.style.backgroundColor = 'red'
+            segment.style.backgroundColor = 'green'
             segment.style.width = '30px'
             segment.style.height = '30px'
             segment.style.top = `${coordinates.y * this.cellSize.height}px`

@@ -26,6 +26,7 @@ class Game {
         }
 
         this.snake = undefined
+        this.apple = undefined
     }
 
     start() {
@@ -34,10 +35,12 @@ class Game {
         this.createElements()
         this.setEventListeners()
         this.startGameLoop()
+        this.apple.generateFood()
     }
 
     createElements() {
         this.snake = new Snake(this.board, this.cellSize)
+        this.apple = new Apple(this.gameSize, this.cellSize)
     }
 
     setDimensions() {
