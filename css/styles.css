@@ -21,22 +21,13 @@ body {
 }
 
 .content {
-    display: flex;
-    justify-content: center;
     padding: 30px;
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(10, 30px);
-    gap: 1px;
+    position: relative;
 }
 
-.cell {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #fff;
-}
 
 .snake {
     background-color: #3498db;
@@ -62,9 +53,3 @@ body {
 .button-primary {
     background-color: #2ecc71;
 }
-
-
-
-
-
-
