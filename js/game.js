@@ -39,7 +39,7 @@ class Game {
     }
 
     createElements() {
-        this.snake = new Snake(this.board, this.cellSize)
+        this.snake = new Snake(this.board, this.cellSize, this.gameSpecs.cols, this.gameSpecs.rows)    
         this.apple = new Apple(this.gameSize, this.cellSize)
     }
 
@@ -94,6 +94,6 @@ class Game {
 
         setInterval(() => {
             this.snake.draw()
-        }, 1000)
+        }, 200)
     }
 }

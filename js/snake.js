@@ -1,19 +1,22 @@
 class Snake {
 
-    constructor(board, cellSize) {
+    constructor(board, cellSize, boardWidth, boardHeight) {
 
         this.board = board
         this.cellSize = cellSize
         this.direction = 'right'
+        this.boardWidth = boardWidth
+        this.boardHeight = boardHeight
 
         this.body = [
-            // { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
-            { x: 3, y: 1 }
+            { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
+            //{ x: 3, y: 1 }
         ]
     }
 
     draw() {
         this.cleanSnake()
+        this.checkCollision()
         this.move()
         this.updatePosition()
     }
@@ -22,44 +25,30 @@ class Snake {
         const snakeSegments = document.querySelectorAll(".snake-segment")
         snakeSegments.forEach(segment => segment.remove())
     }
-
+        
     move() {
-
-        this.body = this.body.map(elm => {
-
-            let xAxis = elm.x
-            let yAxis = elm.y
-
-            switch (this.direction) {
-                case 'up':
-                    yAxis = elm.y - 1;
-                    break;
-                case 'down':
-                    yAxis = elm.y + 1;
-                    break;
-                case 'right':
-                    xAxis = elm.x + 1;
-                    break;
-                case 'left':
-                    xAxis = elm.x - 1;
-                    break;
-                default: S
-                    break;
+        this.body = this.body.map((currentSegment, index) => {
+            if (index === 0) {
+                switch (this.direction) {
+                    case 'up':
+                        return { x: currentSegment.x, y: Math.max(currentSegment.y - 1, 0)};
+                    case 'down':
+                        return { x: currentSegment.x, y: Math.min(currentSegment.y + 1, this.boardHeight - 1) };
+                    case 'right':
+                        return { x: Math.min(currentSegment.x + 1, this.boardWidth - 1), y: currentSegment.y };
+                    case 'left':
+                        return { x: Math.max(currentSegment.x - 1, 0), y: currentSegment.y };
+                    default:
+                        return currentSegment;
+                }
+            } else {
+                return { ...this.body[index - 1] };
             }
-
-
-            const newPosition = {
-                x: xAxis,
-                y: yAxis
-            }
-
-            return newPosition
-        })
-
+        });
     }
-
+        
     updatePosition() {
-        // dibujar
+        // dibujara
         this.body.forEach(coordinates => {
 
             const segment = document.createElement('div')
@@ -92,4 +81,23 @@ class Snake {
         this.direction = 'down'
     }
 
+
+    checkCollision() {
+        console.log('Checking for collision...')
+        const head = this.body[0]
+        console.log('Head position:', head.x, head.y)
+        if (head.x <= 0 || head.x >= this.boardWidth || head.y < 0 || head.y >= this.boardHeight) {
+            console.log('Collision detected!')
+            alert('Game Over!')
+            this.reset()
+        }
+    }
+    reset() {
+        this.direction = undefined
+
+        this.body = [
+            { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
+        ]
+
+    }
 }
