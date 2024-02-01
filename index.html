@@ -10,15 +10,13 @@
 
 <body>
     <header>
-        <h1>Snake game</h1>
+        <h1 style="font-size: xx-large;">Snake game</h1>
     </header>
 
-    <div id="gameView" class="view">
+    <div id="gameView" class="view" style="display: none">
 
-        <div id="highScore"></div>
-        <div id="currentScore"></div>
-        <div id="timer"></div>
-
+        <div id="currentScore">Score: </div>
+        
 
         <div class="content">
             <div id="board">
@@ -26,34 +24,25 @@
             </div>
 
         </div>
-        <button id="restartButton" class="button-primary">Restart</button>
     </div>
 
-    <div id='menuView' class="view" style="display: none">
+    <div id="menuView" class="view">
 
         <div class="content">
-            <div id='gameMenu'></div>
+            <img src="imgs/Snake.jpg" alt="snake-img">
         </div>
-
-        <button id="startButton" class='button'>Start</button>
-        <button id="selectColor" class='button'>Select your Snake!</button>
+        <button id="startButton" class="button">Start</button>
     </div>
-
-    </div>
-
-    <div id='selectView' class="view" style="display: none">
-
+    
+    <div id="endView" class="view" style="display: none">
         <div class="content">
-            <div id="snakeOptions"></div>
-            <button id="leftArrowButton" class="button">←</button>
-            <button id="rightArrowButton" class="button">→</button>
-
+            <div style="font-size: 100px;">GAME OVER</div>
+            <div id= 'highScore' style="font-size: 50px;">Your Score was: </div>
+            <img src="imgs/sad snake.png" alt="snake-very-sad" width="500" height="500" style="position: relative;">
         </div>
-
-
+        <button id="restartButton" class="button">Restart</button>
 
     </div>
-
 
     <script src='./js/apple.js'></script>
     <script src='./js/snake.js'></script>

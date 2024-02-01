@@ -1,14 +1,13 @@
 class Snake {
-
-    constructor(board, cellSize, boardWidth, boardHeight, foodPosition) {
+    constructor(board, cellSize, gameSpecs) {
 
         this.board = board
         this.cellSize = cellSize
-        this.direction;
-        this.boardWidth = boardWidth
-        this.boardHeight = boardHeight
-        this.foodPosition = foodPosition
-
+        this.direction = 'right'
+        this.boardWidth = gameSpecs.cols
+        this.boardHeight = gameSpecs.rows
+        this.totalScore = document.querySelector('#highScore')
+        this.score = gameSpecs.score
         
         this.body = [
             { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
@@ -84,31 +83,32 @@ class Snake {
 
 
     checkCollision() {
-        console.log('Checking for collision...')
         const head = this.body[0]
-        console.log('Head position:', head.x, head.y)
         if (head.x <= 0 || head.x >= (this.boardWidth - 1)|| head.y <= 0 || head.y >= (this.boardHeight - 1)) {
-            console.log(this.boardHeight)
-            alert('Game Over!')
-            this.reset()
+            this.totalScore.innerHTML = `Your Score was: ${this.game.gameSpecs.score}`
+            this.gameOver()
         }
     }
 
-    eatApple() {
-        const tail = { ...this.body -1 }
-        this.body.push(tail)
-
-        this.game.apple.remove()
-
-        this.game.generateFood()
+    grow(){
+        const snakeTail = this.body[this.body.length -1]
+        const newSegment ={
+            x: snakeTail.x,
+            y: snakeTail.y
+        }
+        this.body.push(newSegment)
     }
 
-    reset() {
-        this.direction = undefined
 
+    gameOver(){
+        this.cleanSnake()
+        gameView.style.display = 'none' 
+        menuView.style.display = 'none' 
+        endView.style.display = 'flex'
         this.body = [
             { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
         ]
 
     }
+    
 }

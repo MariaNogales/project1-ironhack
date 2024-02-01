@@ -6,7 +6,6 @@ body {
 
 .view {
     overflow-y: auto;
-    padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -21,7 +20,7 @@ body {
 }
 
 .content {
-    padding: 30px;
+    padding: 5px;
 }
 
 #board {

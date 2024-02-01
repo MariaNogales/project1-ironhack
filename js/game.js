@@ -4,13 +4,12 @@ class Game {
 
         this.board = document.querySelector('#board')
         this.startButton = document.querySelector('#startButton')
-
-        this.foodPosition = { x: 5, y: 5 }
+        this.currentScore = document.querySelector('#currentScore')
 
 
         this.gameSize = {
-            width: 300,
-            height: 300
+            width: 600,
+            height: 600
         }
 
         this.cellSize = {
@@ -19,14 +18,15 @@ class Game {
         }
 
         this.gameSpecs = {
-            score: 0,
-            maxScore: 0,
-            rows: 10,
-            cols: 10
+            score : 0,
+            rows: 20,
+            cols: 20,
         }
 
         this.snake = undefined
-        this.apple = undefined
+        this.apples = undefined
+
+        this.frameCounter = 0
     }
 
     start() {
@@ -39,8 +39,9 @@ class Game {
         this.snake.game = this
     }
 
+
     createElements() {
-        this.snake = new Snake(this.board, this.cellSize, this.gameSpecs.cols, this.gameSpecs.rows)
+        this.snake = new Snake(this.board, this.cellSize, this.gameSpecs)
         this.generateFood()
     }
 
@@ -95,56 +96,54 @@ class Game {
         this.apple = new Apple(this.board, this.gameSize, this.cellSize, this.gameSpecs)
     }
 
-    didCollide(apple) {
-        console.log('Snake Object:', this.snake)
-        const head = this.body[0];
-        const headRect = {
-            left: head.x * this.cellSize.width,
-            right: (head.x + 1) * this.cellSize.width,
-            top: head.y * this.cellSize.height,
-            bottom: (head.y + 1) * this.cellSize.height
-        };
 
-        const appleRect = {
-            left: apple.foodPosition.x,
-            right: apple.foodPosition.x + this.cellSize.width,
-            top: apple.foodPosition.y,
-            bottom: apple.foodPosition.y + this.cellSize.height
-        };
+    didCollide() {
+
+        const snakeHead = document.querySelector('.snake-segment')
+
+        const snakeRect = snakeHead.getBoundingClientRect()
+        const appleRect = this.apple.food.getBoundingClientRect()
+
+        console.log('PP', appleRect, 'sn', snakeRect)
 
         if (
-            headRect.left < appleRect.right &&
-            headRect.right > appleRect.left &&
-            headRect.top < appleRect.bottom &&
-            headRect.bottom > appleRect.top
-        ) {
-            console.log('Collision with apple!');
+            snakeRect.left < appleRect.right &&
+            snakeRect.right > appleRect.left &&
+            snakeRect.top < appleRect.bottom &&
+            snakeRect.bottom > appleRect.top
+          ) {
+            this.eatApple()
             return true;
-        } else {
+          } else {
             return false;
-        }
-    }
+          }
+     
+      }
+
 
     eatApple() {
-        const tail = { ...this.body -1 }
-        this.body.push(tail)
-
-        this.game.apple.remove()
-
-        this.game.generateFood()
+        this.apple.food.remove()
+        this.gameSpecs.score += 1
+        this.currentScore.innerHTML = `Score: ${this.gameSpecs.score}`
+        this.snake.grow()
+        this.generateFood()
+        this.frameCounter = 0
     }
 
-    checkCollisionFood() {
-        if (this.didCollide(this.apple)) {
-            this.snake.eatApple();
+
+    repositionApple(){
+        if (this.frameCounter == 20){
+            this.apple.food.remove()
+            this.generateFood()
+            this.frameCounter = 0
         }
     }
-
-    startGameLoop() {
-
+    startGameLoop() {   
         setInterval(() => {
             this.snake.draw()
-            this.checkCollisionFood()
-        }, 200)
+            this.didCollide()
+            this.frameCounter++
+            this.repositionApple()
+        }, 150)
     }
 }
