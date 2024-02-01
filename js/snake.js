@@ -1,13 +1,15 @@
 class Snake {
 
-    constructor(board, cellSize, boardWidth, boardHeight) {
+    constructor(board, cellSize, boardWidth, boardHeight, foodPosition) {
 
         this.board = board
         this.cellSize = cellSize
-        this.direction = 'right'
+        this.direction;
         this.boardWidth = boardWidth
         this.boardHeight = boardHeight
+        this.foodPosition = foodPosition
 
+        
         this.body = [
             { x: 3, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 1 }
             //{ x: 3, y: 1 }
@@ -48,7 +50,6 @@ class Snake {
     }
         
     updatePosition() {
-        // dibujara
         this.body.forEach(coordinates => {
 
             const segment = document.createElement('div')
@@ -86,12 +87,22 @@ class Snake {
         console.log('Checking for collision...')
         const head = this.body[0]
         console.log('Head position:', head.x, head.y)
-        if (head.x <= 0 || head.x >= this.boardWidth || head.y < 0 || head.y >= this.boardHeight) {
-            console.log('Collision detected!')
+        if (head.x <= 0 || head.x >= (this.boardWidth - 1)|| head.y <= 0 || head.y >= (this.boardHeight - 1)) {
+            console.log(this.boardHeight)
             alert('Game Over!')
             this.reset()
         }
     }
+
+    eatApple() {
+        const tail = { ...this.body -1 }
+        this.body.push(tail)
+
+        this.game.apple.remove()
+
+        this.game.generateFood()
+    }
+
     reset() {
         this.direction = undefined
 

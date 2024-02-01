@@ -51,3 +51,28 @@ class Snake {
 
     }
 }
+
+
+
+didCollide(apple) {
+    const snakeRect = this.element.getBoundingClientRect();
+    const appleRect = this.element.getBoundingClientRect();
+    if (
+      snakeRect.left < appleRect.right &&
+      snakeRect.right > appleRect.left &&
+      snakeRect.top < appleRect.bottom &&
+      snakeRect.bottom > appleRect.top
+    ) {
+      console.log(“Crash!“);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
+
+
+
+

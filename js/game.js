@@ -33,14 +33,15 @@ class Game {
         this.setDimensions()
         this.appendCells()
         this.createElements()
+
         this.setEventListeners()
         this.startGameLoop()
-        this.apple.generateFood()
+        this.snake.game = this
     }
 
     createElements() {
-        this.snake = new Snake(this.board, this.cellSize, this.gameSpecs.cols, this.gameSpecs.rows)    
-        this.apple = new Apple(this.gameSize, this.cellSize)
+        this.snake = new Snake(this.board, this.cellSize, this.gameSpecs.cols, this.gameSpecs.rows)
+        this.generateFood()
     }
 
     setDimensions() {
@@ -90,10 +91,60 @@ class Game {
         }
     }
 
+    generateFood(){
+        this.apple = new Apple(this.board, this.gameSize, this.cellSize, this.gameSpecs)
+    }
+
+    didCollide(apple) {
+        console.log('Snake Object:', this.snake)
+        const head = this.body[0];
+        const headRect = {
+            left: head.x * this.cellSize.width,
+            right: (head.x + 1) * this.cellSize.width,
+            top: head.y * this.cellSize.height,
+            bottom: (head.y + 1) * this.cellSize.height
+        };
+
+        const appleRect = {
+            left: apple.foodPosition.x,
+            right: apple.foodPosition.x + this.cellSize.width,
+            top: apple.foodPosition.y,
+            bottom: apple.foodPosition.y + this.cellSize.height
+        };
+
+        if (
+            headRect.left < appleRect.right &&
+            headRect.right > appleRect.left &&
+            headRect.top < appleRect.bottom &&
+            headRect.bottom > appleRect.top
+        ) {
+            console.log('Collision with apple!');
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    eatApple() {
+        const tail = { ...this.body -1 }
+        this.body.push(tail)
+
+        this.game.apple.remove()
+
+        this.game.generateFood()
+    }
+
+    checkCollisionFood() {
+        if (this.didCollide(this.apple)) {
+            this.snake.eatApple();
+        }
+    }
+
     startGameLoop() {
 
         setInterval(() => {
             this.snake.draw()
+            this.checkCollisionFood()
         }, 200)
     }
 }
